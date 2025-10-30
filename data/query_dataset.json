@@ -1,0 +1,38 @@
+[
+  {
+    "query": "What is the punishment for murder?",
+    "category": "criminal"
+  },
+  {
+    "query": "Information about theft and robbery",
+    "category": "criminal"
+  },
+  {
+    "query": "What does the law say about kidnapping?",
+    "category": "criminal"
+  },
+  {
+    "query": "Explain the rules for arrest without a warrant",
+    "category": "procedural"
+  },
+  {
+    "query": "How does a search warrant work?",
+    "category": "procedural"
+  },
+  {
+    "query": "What is the procedure for bail?",
+    "category": "procedural"
+  },
+  {
+    "query": "What is considered evidence in court?",
+    "category":"evidence"
+  },
+  {
+    "query": "Who can be a witness?",
+    "category": "evidence"
+  },
+  {
+    "query": "What is a confession?",
+    "category": "evidence"
+  }
+]
