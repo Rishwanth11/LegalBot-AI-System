@@ -136,43 +136,34 @@ def find_relevant_sections(query, processed_query, category, categorized_data, s
                 if key in section_map:
                     found_sections.append(section_map[key])
     
-    # If no section number matched, do a text search *only in the predicted category*
+    # If no section number matched, do a text search only in the predicted category
     if not found_sections:
         data_to_search = categorized_data.get(category, [])
         if not data_to_search:
              # Fallback to all data if category is weird
              data_to_search = categorized_data["criminal"] + categorized_data["procedural"] + categorized_data["evidence"]
              
-        # --- *** NEW RANKED SEARCH LOGIC *** ---
-        # Search for the *lemmatized* (root) words from the query
-        # We will rank sections based on *how many* tokens match
+        # --- NEW SEARCH LOGIC (INTERSECTION / "AND" search) ---
+        # Search for the lemmatized (root) words from the query
+        # We will require ALL tokens to be in the text
         
         search_tokens = processed_query.split()
         if not search_tokens:
             return [] # No search terms
 
-        ranked_matches = [] # List to hold (match_count, section) tuples
-
         for section in data_to_search:
             text_lower = section["text"].lower()
-            match_count = 0
-            
+            all_tokens_found = True # Start by assuming all tokens are found
             for token in search_tokens:
                 # Use regex to find the token as a whole word
                 query_regex = r'\b' + re.escape(token) + r'\b'
-                if re.search(query_regex, text_lower):
-                    match_count += 1
+                if not re.search(query_regex, text_lower):
+                    all_tokens_found = False # If one token is missing, fail this section
+                    break 
             
-            if match_count > 0: # Add if at least one token matched
-                ranked_matches.append((match_count, section))
-        
-        # Sort the results: higher match_count first
-        ranked_matches.sort(key=lambda item: item[0], reverse=True)
-        
-        # Get just the section objects from the sorted list
-        for count, section in ranked_matches:
-            if section not in found_sections: # Avoid duplicates
-                found_sections.append(section)
+            if all_tokens_found: # Only add if ALL tokens were found
+                if section not in found_sections:
+                    found_sections.append(section)
                 
     return found_sections[:5] # Return top 5 matches
 
@@ -185,10 +176,10 @@ def generate_answer_with_llm(query, relevant_sections):
     if relevant_sections:
         context = (
             "You are LegalBot, a helpful AI legal assistant. Your task is to answer the user's question.\n"
-            "Base your answer *only* on the relevant legal sections provided below.\n"
+            "Base your answer only on the relevant legal sections provided below.\n"
             "Quote the section number and source (e.g., BNS Section 101) for your information.\n"
             "Do not use any outside knowledge. If the answer is not in the provided sections, say so.\n\n"
-            f"**User's Question:** {query}\n\n"
+            f"*User's Question:* {query}\n\n"
             "--- Relevant Legal Sections ---\n\n"
         )
         
@@ -196,11 +187,11 @@ def generate_answer_with_llm(query, relevant_sections):
             source_doc = section['source_document'].split('.')[0].upper()
             title_preview = section['title'] # Use the title we created
             
-            context += f"**Source {i+1} ({source_doc} Section {section['section_number']}: {title_preview}):**\n"
+            context += f"*Source {i+1} ({source_doc} Section {section['section_number']}: {title_preview}):*\n"
             context += f"{section['text']}\n\n"
         
         context += "--- End of Sections ---\n\n"
-        context += "Please provide a clear and direct answer to the user's question based *only* on these sections."
+        context += "Please provide a clear and direct answer to the user's question based only on these sections."
 
     # --- PROMPT 2: General Conversation ---
     else:
@@ -210,8 +201,8 @@ def generate_answer_with_llm(query, relevant_sections):
             "If the user is asking a legal question that you don't have specific sections for, "
             "politely explain that you can only answer questions about the BNS, BNSS, and BSA "
             "and suggest they try searching for specific keywords or section numbers.\n\n"
-            f"**User's Question:** {query}\n\n"
-            "**Your Answer:**"
+            f"*User's Question:* {query}\n\n"
+            "*Your Answer:*"
         )
 
     # Call the Gemini model with the chosen prompt
@@ -230,7 +221,7 @@ if not query_classifier:
     st.stop()
 
 # --- Streamlit App UI ---
-st.title("⚖️ LegalBot")
+st.title("⚖ LegalBot")
 st.subheader("AI-Powered Judiciary Reference System")
 
 if "messages" not in st.session_state:
@@ -266,12 +257,12 @@ if prompt := st.chat_input("Ask about BNS, BNSS, or BSA sections..."):
             sections = []
         elif section_match:
             # It's a section number lookup, skip classification
-            st.info("Query classified as: **Section Number Lookup**")
+            st.info("Query classified as: *Section Number Lookup*")
             sections = find_relevant_sections(prompt, processed_prompt, "general", categorized_legal_data, legal_section_map)
         elif processed_prompt.strip(): # Check if it's not empty
             # It's a topic query, so classify it
             predicted_category = query_classifier.predict([processed_prompt])[0]
-            st.info(f"Query classified as: **{predicted_category}**") # Show the category
+            st.info(f"Query classified as: *{predicted_category}*") # Show the category
             sections = find_relevant_sections(prompt, processed_prompt, predicted_category, categorized_legal_data, legal_section_map)
         
         # 4. Generate: Ask the LLM to create an answer
