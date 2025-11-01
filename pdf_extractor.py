@@ -4,6 +4,7 @@ import os
 import json
 import glob
 import re  # Import the Regular Expressions library
+import nltk # Import NLTK
 
 DATA_FOLDER = "data"
 OUTPUT_FOLDER = "data"
@@ -26,6 +27,14 @@ def extract_all_text_from_pdf(pdf_path):
                     page = reader.pages[page_num]
                     text = page.extract_text()
                     if text:
+                        # --- NEW CLEANING ---
+                        # Remove common PDF headers/footers that confuse the parser
+                        # This removes lines that are just page numbers
+                        text = re.sub(r"^\s*\d+\s*$", "", text, flags=re.MULTILINE) 
+                        text = re.sub(r"THE BHARATIYA NYAYA SANHITA, 2023", "", text, flags=re.IGNORECASE)
+                        text = re.sub(r"THE BHARATIYA NAGARIK SURAKSHA SANHITA, 2023", "", text, flags=re.IGNORECASE)
+                        text = re.sub(r"THE BHARATIYA SAKSHYA ADHINIYAM, 2023", "", text, flags=re.IGNORECASE)
+                        
                         full_text += text + "\n" # Add text and a newline
                 except Exception as page_e:
                     print(f"Warning: Could not read page {page_num} of {os.path.basename(pdf_path)}. Error: {page_e}")
@@ -42,30 +51,36 @@ def extract_all_text_from_pdf(pdf_path):
 def structure_text_with_regex(full_text, source_doc_name):
     """
     Uses Regex to find and structure legal sections.
-    This new pattern is simpler and more robust.
+    This new pattern is more robust.
     """
     print(f"Structuring data for {source_doc_name} using Regex...")
     structured_data = []
     
-    # --- UPDATED REGEX ---
-    # This pattern simply looks for a number followed by a period,
-    # and then captures all text until the next number/period or the end of the file.
+    # --- UPDATED ROBUST REGEX ---
+    # This pattern looks for a section number (e.g., "99.") at the beginning of a line.
+    # It then captures ALL text (including newlines) until it finds the *next*
+    # section number at the start of a line, OR the end of the document.
     
     pattern = re.compile(
-        r"\n(\d+)\.\s+((?:.|\n)*?)(?=\n\d+\.\s+|\Z)",
-        re.IGNORECASE
+        r"^(\d+)\.\s+((?:.|\n)*?)(?=^\d+\.\s|\Z)",
+        re.MULTILINE # This makes ^ match the start of each line
     )
 
     matches = pattern.finditer(full_text)
     
     for match in matches:
         section_number = match.group(1).strip()
-        # The first ~100 chars of the text will serve as a 'title'/'preview'
-        text_content = ' '.join(match.group(2).strip().split()) # Clean up text
+        
+        # Clean up the text content
+        text_content = ' '.join(match.group(2).strip().split())
+        
+        # Extract the first sentence or first 15 words as a "title"
+        title = " ".join(text_content.split()[:15]) + "..."
         
         if text_content: # Only add if we found text
             structured_data.append({
                 "section_number": section_number,
+                "title": title, # Use the first part of the text as a title/preview
                 "text": text_content, # The full text of the section
                 "source_document": source_doc_name
             })
@@ -82,10 +97,24 @@ def save_to_json(data, output_path):
     except Exception as e:
         print(f"Error saving data to JSON '{output_path}': {e}")
 
-# --- Main execution block ---
+# --- Main execution block (for testing) ---
 if __name__ == "__main__":
-    os.makedirs(OUTPUT_FOLDER, exist_ok=True) 
     
+    # --- Setup NLTK (Downloads if not found) ---
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        print("Downloading NLTK stopwords...")
+        nltk.download('stopwords')
+        
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        print("Downloading NLTK punkt...")
+        nltk.download('punkt')
+    # --- End Setup ---
+    
+    os.makedirs(OUTPUT_FOLDER, exist_ok=True) 
     pdf_files = glob.glob(os.path.join(DATA_FOLDER, "*.pdf"))
     
     if not pdf_files:
@@ -97,24 +126,21 @@ if __name__ == "__main__":
         pdf_base_name = os.path.basename(pdf_path)
         print(f"\n--- Processing {pdf_base_name} ---")
         
-        # 1. Extract all text into one big string
         full_text = extract_all_text_from_pdf(pdf_path)
         
         if not full_text:
             continue 
             
-        # 2. Structure the text using Regex
         structured_legal_data = structure_text_with_regex(full_text, pdf_base_name)
         
-        # 3. Save the new structured data (overwrites the old page-based JSON)
         output_json_filename = os.path.splitext(pdf_base_name)[0] + ".json"
         output_json_path = os.path.join(OUTPUT_FOLDER, output_json_filename)
         
         save_to_json(structured_legal_data, output_json_path)
 
-        # Print a sample from the generated JSON
         if structured_legal_data:
              print(f"\n--- Sample from {output_json_filename} (First section found) ---")
              print(json.dumps(structured_legal_data[0], indent=4))
         
     print("\n--- All PDF processing complete ---")
+    

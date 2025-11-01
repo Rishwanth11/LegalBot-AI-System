@@ -5,9 +5,20 @@ import os
 import glob
 import google.generativeai as genai
 import re
+# Import our new NLP functions
+from nlp_processor import preprocess_text, load_dataset, train_classifier
 
 # --- Configuration ---
 DATA_FOLDER = "data"
+
+# A map to link categories to their specific JSON files
+CATEGORY_TO_FILE = {
+    "criminal": "bns.json",
+    "procedural": "bnss.json",
+    "evidence": "bsa.json"
+}
+
+# Configure the Gemini API key
 try:
     genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 except KeyError:
@@ -18,44 +29,89 @@ except Exception as e:
     st.stop()
 
 # --- Data Loading ---
-@st.cache_data
-def load_all_legal_data():
-    """Loads and combines data from all .json files."""
+@st.cache_resource  # Use cache_resource for models/data that shouldn't be re-created
+def load_all_models_and_data():
+    """
+    Loads all JSON data, the sample dataset, and trains the classifier.
+    This function runs only once.
+    """
+    # 1. Load all legal sections from all JSONs
     all_data = []
     json_files = glob.glob(os.path.join(DATA_FOLDER, "*.json"))
     
     if not json_files:
         st.error(f"No JSON data files found in '{DATA_FOLDER}'. Run pdf_extractor.py.")
-        return [], {}
+        return None, None, None
 
     print(f"Loading data from files: {json_files}")
     section_map = {} # For fast lookup by section number
+    
+    # Create a dictionary to hold data per category
+    categorized_data = {
+        "criminal": [],
+        "procedural": [],
+        "evidence": []
+    }
+
     for file_path in json_files:
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                all_data.extend(data) 
+                all_data.extend(data) # We still need a list of all data for fallback
+                
+                # Find the category for this file
+                file_name = os.path.basename(file_path)
+                category = None
+                for cat, f_name in CATEGORY_TO_FILE.items():
+                    if f_name == file_name:
+                        category = cat
+                        break
+                
+                if category:
+                    categorized_data[category].extend(data)
+                
+                # Create the section map for fast lookups
                 for section in data:
-                    key = (os.path.basename(file_path), section['section_number'])
+                    key = (file_name, section['section_number'])
                     section_map[key] = section
         except Exception as e:
             print(f"Error loading {file_path}: {e}")
             
     print(f"Successfully loaded {len(all_data)} total sections.")
-    return all_data, section_map
+
+    # 2. Load the training dataset
+    dataset_path = os.path.join(DATA_FOLDER, "query_dataset.json")
+    dataset = load_dataset(dataset_path)
+    if not dataset:
+        st.error(f"Could not load {dataset_path}. Classifier cannot be trained.")
+        return all_data, section_map, None
+
+    # 3. Train the classifier
+    classifier = train_classifier(dataset)
+    if not classifier:
+        st.error("Model training failed. Check nlp_processor.py.")
+        return all_data, section_map, None
+        
+    print("NLP Classifier trained and ready.")
+    return categorized_data, section_map, classifier
 
 # --- Search and Generation (The "Smart" Part) ---
-def find_relevant_sections(query, legal_data, section_map):
+def find_relevant_sections(query, processed_query, category, categorized_data, section_map):
     """
     Performs a smarter search to find relevant sections.
     """
     query_lower = query.lower().strip()
     
-    greetings = ["hi", "hello", "hey", "how are you", "whats is your name", "what is your name", "i love you"]
-    if query_lower in greetings:
-        return [] # Return an empty list for greetings
+    # --- UPDATED CHAT WORDS ---
+    chat_words = ["hi", "hello", "hey", "how are you", "what your name", 
+                  "what is your name", "love you", "ok", "thanks", "thank you", 
+                  "no thanks", "no", "can say name", "what are you doing", "what mean"]
+    if processed_query in chat_words or processed_query.replace(" ", "") in chat_words:
+        return [] # Return an empty list for chatter
 
+    # --- UPDATED LOGIC ---
     # Try to find a section number (e.g., "bns 101", "section 326", "99")
+    # We check for this FIRST, before classification.
     section_match = re.search(r'(bns|bnss|bsa)?\s*(?:section\s*)?(\d+)', query_lower)
     
     found_sections = []
@@ -80,18 +136,45 @@ def find_relevant_sections(query, legal_data, section_map):
                 if key in section_map:
                     found_sections.append(section_map[key])
     
-    # If no section number matched, do a text search
+    # If no section number matched, do a text search *only in the predicted category*
     if not found_sections:
-         for section in legal_data:
-            # Check if query is in the first 200 chars of text (like a title search)
-            if query_lower in section["text"][:200].lower():
-                found_sections.append(section)
-            # If not found in title, check the full text
-            elif query_lower in section["text"].lower():
+        data_to_search = categorized_data.get(category, [])
+        if not data_to_search:
+             # Fallback to all data if category is weird
+             data_to_search = categorized_data["criminal"] + categorized_data["procedural"] + categorized_data["evidence"]
+             
+        # --- *** NEW RANKED SEARCH LOGIC *** ---
+        # Search for the *lemmatized* (root) words from the query
+        # We will rank sections based on *how many* tokens match
+        
+        search_tokens = processed_query.split()
+        if not search_tokens:
+            return [] # No search terms
+
+        ranked_matches = [] # List to hold (match_count, section) tuples
+
+        for section in data_to_search:
+            text_lower = section["text"].lower()
+            match_count = 0
+            
+            for token in search_tokens:
+                # Use regex to find the token as a whole word
+                query_regex = r'\b' + re.escape(token) + r'\b'
+                if re.search(query_regex, text_lower):
+                    match_count += 1
+            
+            if match_count > 0: # Add if at least one token matched
+                ranked_matches.append((match_count, section))
+        
+        # Sort the results: higher match_count first
+        ranked_matches.sort(key=lambda item: item[0], reverse=True)
+        
+        # Get just the section objects from the sorted list
+        for count, section in ranked_matches:
+            if section not in found_sections: # Avoid duplicates
                 found_sections.append(section)
                 
-    # Return top 5 matches
-    return found_sections[:5] 
+    return found_sections[:5] # Return top 5 matches
 
 def generate_answer_with_llm(query, relevant_sections):
     """
@@ -111,8 +194,7 @@ def generate_answer_with_llm(query, relevant_sections):
         
         for i, section in enumerate(relevant_sections):
             source_doc = section['source_document'].split('.')[0].upper()
-            # Get the first part of the text as a "title"
-            title_preview = ' '.join(section['text'].split()[:15]) + "..."
+            title_preview = section['title'] # Use the title we created
             
             context += f"**Source {i+1} ({source_doc} Section {section['section_number']}: {title_preview}):**\n"
             context += f"{section['text']}\n\n"
@@ -124,7 +206,7 @@ def generate_answer_with_llm(query, relevant_sections):
     else:
         context = (
             "You are LegalBot, a helpful AI legal assistant. You are speaking to a user.\n"
-            "If the user's question is a greeting or general chat (like 'hi', 'i love you'), respond politely and conversationally.\n"
+            "If the user's question is a greeting or general chat (like 'hi', 'i love you', 'ok', 'thanks', 'no', 'what are you doing'), respond politely and conversationally.\n"
             "If the user is asking a legal question that you don't have specific sections for, "
             "politely explain that you can only answer questions about the BNS, BNSS, and BSA "
             "and suggest they try searching for specific keywords or section numbers.\n\n"
@@ -141,10 +223,10 @@ def generate_answer_with_llm(query, relevant_sections):
         print(f"Error during AI generation: {e}")
         return f"An error occurred while generating the answer: {e}"
 
-# --- Load Data ---
-legal_data_all, legal_section_map = load_all_legal_data()
-if not legal_data_all:
-    st.error("Legal data could not be loaded. Stopping app.")
+# --- Load Data and Train Models ONCE ---
+categorized_legal_data, legal_section_map, query_classifier = load_all_models_and_data()
+if not query_classifier:
+    st.error("NLP Classification model failed to load. The app cannot proceed.")
     st.stop()
 
 # --- Streamlit App UI ---
@@ -153,7 +235,7 @@ st.subheader("AI-Powered Judiciary Reference System")
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hello! I am LegalBot. You can ask me about the Bharatiya Nyaya Sanhita (BNS), Bharatiya Nagarik Suraksha Sanhita (BNSS), and Bharatiya Sakshya Adhiniyam (BSA). How can I help?"}
+        {"role": "assistant", "content": "Hello! I am LegalBot. I can answer questions about the BNS (Criminal), BNSS (Procedural), and BSA (Evidence). How can I help?"}
     ]
 
 for message in st.session_state.messages:
@@ -164,10 +246,38 @@ if prompt := st.chat_input("Ask about BNS, BNSS, or BSA sections..."):
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    with st.spinner("Finding relevant sections and generating answer..."):
-        sections = find_relevant_sections(prompt, legal_data_all, legal_section_map)
+    with st.spinner("Analyzing and generating answer..."):
+        # 1. Preprocess the query
+        processed_prompt = preprocess_text(prompt)
+        
+        # --- UPDATED LOGIC ---
+        predicted_category = ""
+        sections = []
+        
+        # Check for section number match first (fixes "section 202" bug)
+        section_match = re.search(r'(bns|bnss|bsa)?\s*(?:section\s*)?(\d+)', prompt.lower())
+        
+        chat_words = ["hi", "hello", "hey", "how are you", "what your name", 
+                      "what is your name", "love you", "ok", "thanks", "thank you", 
+                      "no thanks", "no", "can say name", "what are you doing", "what mean"]
+        
+        if processed_prompt.replace(" ", "") in chat_words:
+            # It's a greeting
+            sections = []
+        elif section_match:
+            # It's a section number lookup, skip classification
+            st.info("Query classified as: **Section Number Lookup**")
+            sections = find_relevant_sections(prompt, processed_prompt, "general", categorized_legal_data, legal_section_map)
+        elif processed_prompt.strip(): # Check if it's not empty
+            # It's a topic query, so classify it
+            predicted_category = query_classifier.predict([processed_prompt])[0]
+            st.info(f"Query classified as: **{predicted_category}**") # Show the category
+            sections = find_relevant_sections(prompt, processed_prompt, predicted_category, categorized_legal_data, legal_section_map)
+        
+        # 4. Generate: Ask the LLM to create an answer
         answer = generate_answer_with_llm(prompt, sections)
     
+    # Bot's message
     with st.chat_message("assistant"):
         st.markdown(answer)
     st.session_state.messages.append({"role": "assistant", "content": answer})
