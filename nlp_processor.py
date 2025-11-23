@@ -4,10 +4,10 @@ import nltk
 import json
 import os
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+# Removed unused import: from sklearn.model_selection import train_test_split 
 
 # --- Setup NLTK (Downloads if not found) ---
 try:
@@ -23,30 +23,30 @@ except LookupError:
     nltk.download('punkt')
 # --- End Setup ---
 
-# Load the SpaCy model
+# Load the SpaCy model (Assuming 'en_core_web_sm' is installed)
 try:
     nlp = spacy.load("en_core_web_sm")
 except IOError:
-    print("\n--- SpaCy model 'en_core_web_sm' not found. ---")
-    print("Please run this command in your terminal:")
-    print("python -m spacy download en_core_web_sm")
-    exit()
+    print("\n--- SpaCy model 'en_core_web_sm' not found. Please run: python -m spacy download en_core_web_sm ---")
     
 # Get English stop words
 stop_words = set(stopwords.words('english'))
 
 def preprocess_text(text):
     """
-    Cleans and lemmatizes a text query.
+    Cleans, removes stopwords, and lemmatizes a text query using SpaCy.
     """
-    doc = nlp(text.lower()) # Use SpaCy for efficient processing
+    if not isinstance(text, str):
+        return ""
+        
+    doc = nlp(text.lower()) 
     
     processed_tokens = []
     for token in doc:
-        if not token.is_stop and not token.is_punct and token.is_alpha:
+        if not token.is_stop and not token.is_punct and token.is_alpha and token.lemma_:
             processed_tokens.append(token.lemma_)
             
-    return " ".join(processed_tokens) # Return a single string
+    return " ".join(processed_tokens)
 
 def load_dataset(json_path):
     """Loads the sample query dataset from JSON."""
@@ -64,29 +64,30 @@ def load_dataset(json_path):
         print(f"Error loading dataset: {e}")
         return []
 
-# --- NEW: Model Training Function ---
 def train_classifier(dataset):
     """
-    Trains a classification model based on the sample dataset.
+    Trains the query classification model using all available data, 
+    fixing the ValueError caused by test_train_split on sparse data.
     """
     print("Training classification model...")
     if not dataset:
         print("Cannot train model: Dataset is empty.")
         return None
 
-    # 1. Prepare data
+    # 1. Prepare data (use all data for final model training)
     queries = [preprocess_text(item['query']) for item in dataset]
     categories = [item['category'] for item in dataset]
 
+    # The train_test_split section has been removed to fix the ValueError,
+    # as the final model should be trained on 100% of the available data anyway.
+    
     # 2. Create a machine learning "pipeline"
-    # This pipeline first converts text to numbers (TfidfVectorizer)
-    # and then trains a classifier (LogisticRegression)
     model_pipeline = Pipeline([
         ('vectorizer', TfidfVectorizer()),
-        ('classifier', LogisticRegression())
+        ('classifier', LogisticRegression(max_iter=1000)) 
     ])
 
-    # 3. Train the model
+    # 3. Train the model on ALL available data
     try:
         model_pipeline.fit(queries, categories)
         print("Model training complete.")
@@ -95,10 +96,11 @@ def train_classifier(dataset):
         print(f"Error during model training: {e}")
         return None
 
-# --- Main execution block (for testing) ---
+# --- Main execution block (for local testing/debugging) ---
 if __name__ == "__main__":
     
-    # 1. Load the dataset
+    # 1. Load the dataset (Assumes query_dataset.json is in a 'data' folder)
+    # Note: Ensure you have data/query_dataset.json available for this block to run.
     dataset = load_dataset(os.path.join("data", "query_dataset.json"))
     
     if dataset:
@@ -110,9 +112,9 @@ if __name__ == "__main__":
             
             # 3. Test with new queries
             test_queries = [
-                "Tell me about murder punishment",
-                "What is the rule for a police arrest?",
-                "What is a witness statement?"
+                "Tell me about punishment for murder in BNS",
+                "What is the procedure for an arrest warrant?",
+                "Rules for a witness statement"
             ]
             
             for query in test_queries:

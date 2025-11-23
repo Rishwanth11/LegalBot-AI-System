@@ -1,0 +1,182 @@
+[
+    {
+        "type": "useful",
+        "ts": 1763277187.5863338,
+        "message_index": 2,
+        "content": "AI service unavailable. Try again later."
+    },
+    {
+        "message_index": 2,
+        "type": "useless",
+        "timestamp": 1763297517.336142,
+        "content": "An error occurred while generating the answer: 400 API key not valid. Please pass a valid API key. [reason: \"API_KEY_INVALID\"\ndomain: \"googleapis.com\"\nmetadata {\n  key: \"service\"\n  value: \"generativelanguage.googleapis.com\"\n}\n, locale: \"en-US\"\nmessage: \"API key not valid. Please pass a valid API key.\"\n]"
+    },
+    {
+        "message_index": 2,
+        "type": "useless",
+        "timestamp": 1763297521.6223211,
+        "content": "An error occurred while generating the answer: 400 API key not valid. Please pass a valid API key. [reason: \"API_KEY_INVALID\"\ndomain: \"googleapis.com\"\nmetadata {\n  key: \"service\"\n  value: \"generativelanguage.googleapis.com\"\n}\n, locale: \"en-US\"\nmessage: \"API key not valid. Please pass a valid API key.\"\n]"
+    },
+    {
+        "message_index": 2,
+        "type": "useless",
+        "timestamp": 1763297522.9366653,
+        "content": "An error occurred while generating the answer: 400 API key not valid. Please pass a valid API key. [reason: \"API_KEY_INVALID\"\ndomain: \"googleapis.com\"\nmetadata {\n  key: \"service\"\n  value: \"generativelanguage.googleapis.com\"\n}\n, locale: \"en-US\"\nmessage: \"API key not valid. Please pass a valid API key.\"\n]"
+    },
+    {
+        "message_index": 2,
+        "type": "useless",
+        "timestamp": 1763297523.784594,
+        "content": "An error occurred while generating the answer: 400 API key not valid. Please pass a valid API key. [reason: \"API_KEY_INVALID\"\ndomain: \"googleapis.com\"\nmetadata {\n  key: \"service\"\n  value: \"generativelanguage.googleapis.com\"\n}\n, locale: \"en-US\"\nmessage: \"API key not valid. Please pass a valid API key.\"\n]"
+    },
+    {
+        "message_index": 6,
+        "type": "useful",
+        "timestamp": 1763380433.9465494,
+        "content": "Based on the legal sections provided, there are two different laws with a Section 302:\n\n1.  **BNS Section 302** defines the act of \"snatching.\" According to **BNS Section 302 (1)**, \"Theft is 'snatching' if, in order to commit theft, the offender suddenly or quickly or forcibly seizes or secures or grabs or takes away from any person or from hispossession any moveable property.\" The punishment for this offense is imprisonment for up to three years and a fine.\n\n2.  **BNSS Section 302** outlines the procedure for a court to order the production of a person who is in prison. According to **BNSS Section 302 (1)**, a criminal court can \"make an order requiring the officer in charge of the prison to produce such person before the Court answering to the charge or for the purpose of suchproceeding or for giving evidence.\"",
+        "user": "rindia"
+    },
+    {
+        "message_index": 6,
+        "type": "useful",
+        "timestamp": 1763380439.4628215,
+        "content": "Based on the legal sections provided, there are two different laws with a Section 302:\n\n1.  **BNS Section 302** defines the act of \"snatching.\" According to **BNS Section 302 (1)**, \"Theft is 'snatching' if, in order to commit theft, the offender suddenly or quickly or forcibly seizes or secures or grabs or takes away from any person or from hispossession any moveable property.\" The punishment for this offense is imprisonment for up to three years and a fine.\n\n2.  **BNSS Section 302** outlines the procedure for a court to order the production of a person who is in prison. According to **BNSS Section 302 (1)**, a criminal court can \"make an order requiring the officer in charge of the prison to produce such person before the Court answering to the charge or for the purpose of suchproceeding or for giving evidence.\"",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763399181.1661718,
+        "content": "*   **BNS Section 146:** Conspiracy to commit offences punishable by section 145.\n*   **BNS Section 147:** Collecting arms, etc., with intention of waging war against the Government of India.\n*   **BNS Section 148:** Concealing with intent to facilitate design to wage war.\n*   **BNS Section 149:** Assaulting President, Governor, etc ., with intent to compel or restrain the exercise of any lawful power.\n*   **BNS Section 150:** Acts endangering sovereignty unity and integrity of India.\n*   **BNS Section 151:** Waging war against Gov ernment of any foreign State at peace with the Government of India.\n*   **BNS Section 152:** Committing depredation on territories of foreign State at peace with the Government of India.\n*   **BNS Section 153:** Receiving property taken by war or depredation mentioned in sections 153 and\n*   **BNS Section 154:** Public servant voluntarily allowing prisoner of state or war to escape.\n*   **BNS Section 155:** Public servant negligently suffering such prisoner to escape.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763399185.786322,
+        "content": "*   **BNS Section 146:** Conspiracy to commit offences punishable by section 145.\n*   **BNS Section 147:** Collecting arms, etc., with intention of waging war against the Government of India.\n*   **BNS Section 148:** Concealing with intent to facilitate design to wage war.\n*   **BNS Section 149:** Assaulting President, Governor, etc ., with intent to compel or restrain the exercise of any lawful power.\n*   **BNS Section 150:** Acts endangering sovereignty unity and integrity of India.\n*   **BNS Section 151:** Waging war against Gov ernment of any foreign State at peace with the Government of India.\n*   **BNS Section 152:** Committing depredation on territories of foreign State at peace with the Government of India.\n*   **BNS Section 153:** Receiving property taken by war or depredation mentioned in sections 153 and\n*   **BNS Section 154:** Public servant voluntarily allowing prisoner of state or war to escape.\n*   **BNS Section 155:** Public servant negligently suffering such prisoner to escape.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763399187.94735,
+        "content": "*   **BNS Section 146:** Conspiracy to commit offences punishable by section 145.\n*   **BNS Section 147:** Collecting arms, etc., with intention of waging war against the Government of India.\n*   **BNS Section 148:** Concealing with intent to facilitate design to wage war.\n*   **BNS Section 149:** Assaulting President, Governor, etc ., with intent to compel or restrain the exercise of any lawful power.\n*   **BNS Section 150:** Acts endangering sovereignty unity and integrity of India.\n*   **BNS Section 151:** Waging war against Gov ernment of any foreign State at peace with the Government of India.\n*   **BNS Section 152:** Committing depredation on territories of foreign State at peace with the Government of India.\n*   **BNS Section 153:** Receiving property taken by war or depredation mentioned in sections 153 and\n*   **BNS Section 154:** Public servant voluntarily allowing prisoner of state or war to escape.\n*   **BNS Section 155:** Public servant negligently suffering such prisoner to escape.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763401624.337366,
+        "content": "AI service unavailable. Matched sections:\n- bns.pdf Section 146: Conspiracy to commit offences punishable by section 145....\n- bns.pdf Section 147: Collecting arms, etc., with intention of waging war against the Government of India....\n- bns.pdf Section 148: Concealing with intent to facilitate design to wage war....\n- bns.pdf Section 149: Assaulting President, Governor, etc ., with intent to compel or restrain the exercise of any...\n- bns.pdf Section 150: Acts endangering sovereignty unity and integrity of India....\n- bns.pdf Section 151: Waging war against Gov ernment of any foreign State at peace with the Government of...\n- bns.pdf Section 152: Committing depredation on territories of foreign State at peace with the Government of India....\n- bns.pdf Section 153: Receiving property taken by war or depredation mentioned in sections 153 and...\n- bns.pdf Section 154: Public servant voluntarily allowing prisoner of state or war to escape....\n- bns.pdf Section 155: Public servant negligently suffering such prisoner to escape....\n",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763401631.976075,
+        "content": "AI service unavailable. Matched sections:\n- bns.pdf Section 146: Conspiracy to commit offences punishable by section 145....\n- bns.pdf Section 147: Collecting arms, etc., with intention of waging war against the Government of India....\n- bns.pdf Section 148: Concealing with intent to facilitate design to wage war....\n- bns.pdf Section 149: Assaulting President, Governor, etc ., with intent to compel or restrain the exercise of any...\n- bns.pdf Section 150: Acts endangering sovereignty unity and integrity of India....\n- bns.pdf Section 151: Waging war against Gov ernment of any foreign State at peace with the Government of...\n- bns.pdf Section 152: Committing depredation on territories of foreign State at peace with the Government of India....\n- bns.pdf Section 153: Receiving property taken by war or depredation mentioned in sections 153 and...\n- bns.pdf Section 154: Public servant voluntarily allowing prisoner of state or war to escape....\n- bns.pdf Section 155: Public servant negligently suffering such prisoner to escape....\n",
+        "user": "rindia"
+    },
+    {
+        "message_index": 4,
+        "type": "useful",
+        "timestamp": 1763465708.3743021,
+        "content": "Based on the provided text, here are the BNSS sections listed:\n\n*   **Section 1:** Short title, extent and commencement.\n*   **Section 2:** Definitions.\n*   **Section 3:** Construction of references.\n*   **Section 4:** Trial of offences under Bhartiya Nyaya Sanhita and other laws.\n*   **Section 5:** Saving.\n*   **Section 6:** Classes of Criminal Courts.\n*   **Section 7:** Territorial divisions.\n*   **Section 8:** Court of Session.\n*   **Section 9:** Courts of Judicial Magistrates.\n*   **Section 10:** Chief Judicial Magistrate and Additional Chief Judicial Magistrate, etc.\n*   **Section 11:** Special Judicial Magistrates.\n*   **Section 12:** Local jurisdiction of Judicial Magistrates.\n*   **Section 13:** Subordination of Judicial Magistrates.\n*   **Section 14:** Executive Magistrates.\n*   **Section 15:** Special Executive Magistrates.\n*   **Section 16:** Local Jurisdiction of Executive Magistrates.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useless",
+        "timestamp": 1763465835.2476575,
+        "content": "(AI Error: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 2, model: gemini-2.5-pro\nPlease retry in 15.33710591s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-2.5-pro\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 2\n}\n, retry_delay {\n  seconds: 15\n}\n])",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763483519.1811926,
+        "content": "*   **BNS Section 146:** Conspiracy to commit offences punishable by section 145.\n*   **BNS Section 147:** Collecting arms, etc., with intention of waging war against the Government of India.\n*   **BNS Section 148:** Concealing with intent to facilitate design to wage war.\n*   **BNS Section 149:** Assaulting President, Governor, etc ., with intent to compel or restrain the exercise of any lawful power.\n*   **BNS Section 150:** Acts endangering sovereignty unity and integrity of India.\n*   **BNS Section 151:** Waging war against Gov ernment of any foreign State at peace with the Government of India.\n*   **BNS Section 152:** Committing depredation on territories of foreign State at peace with the Government of India.\n*   **BNS Section 153:** Receiving property taken by war or depredation mentioned in sections 153 and\n*   **BNS Section 154:** Public servant voluntarily allowing prisoner of state or war to escape.\n*   **BNS Section 155:** Public servant negligently suffering such prisoner to escape.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 6,
+        "type": "useful",
+        "timestamp": 1763558620.156489,
+        "content": "*   Section 94: Evidence of terms of contracts, grants and other dispositions of property reduced to form of document.\n*   Section 95: Exclusion of evidence of oral agreement.\n*   Section 96: Exclusion of evidence to explain or amend ambiguous document.\n*   Section 97: Exclusion of evidence against application of document to existing facts.\n*   Section 98: Evidence as to document unmeaning in reference to existing facts.\n*   Section 99: Evidence as to application of language which can apply to one only of several persons.\n*   Section 100: Evidence as to application of language to one of two sets of facts, to neither of which the whole correctly applies.\n*   Section 101: Evidence as to meaning of illegible characters, etc.\n*   Section 102: Who may give evidence of agreement varying terms of document.\n*   Section 103: Saving of provisions of Indian Succession Act relating to wills.\n*   Section 104: Burden of proof.\n*   Section 105: On whom burden of proof lies.\n*   Section 106: Burden of proof as to particular fact.\n*   Section 107: Burden of proving fact to be proved to make evidence admissible.\n*   Section 108: Burden of proving that case of accused comes within exceptions.\n*   Section 109: Burden of proving fact especially within knowledge.\n*   Section 110: Burden of proving death of person known to have been alive within thirty years.\n*   Section 111: Burden of proving that person is alive who has not been heard of for seven years.\n*   Section 112: Burden of proof as to relationship in the cases of partners, landlord and tenant, principal and agent.\n*   Section 113: Burden of proof as to ownership.\n*   Section 114: Proof of good faith in transactions where one party is in relation of active confidence.\n*   Section 115: Presumption as to certain offences.\n*   Section 116: Birth during marriage, conclusive proof of legitimacy.\n*   Section 117: Presumption as to abetment of suicide by a married woman.\n*   Section 118: Presumption as to dowry death.\n*   Section 119: Court may presume existence of certain facts.\n*   Section 120: Presumption as to absence of consent in certain prosecution for rape.\n*   Section 121: Estoppel.\n*   Section 122: Estoppel of tenant and of licensee of person in possession.\n*   Section 123: Estoppel of acceptor of bill of exchange, bailee or licensee.\n*   Section 124: Who may testify.\n*   Section 125: Witness unable to communicate verbally.\n*   Section 126: Competency of husband and wife as witnesses in certain cases.\n*   Section 127: Judges and Magistrates.\n*   Section 128: Communications during marriage.\n*   Section 129: Evidence as to affairs of State.\n*   Section 130: Official communications.\n*   Section 131: Information as to commission of offences.\n*   Section 132: Professional communications.\n*   Section 133: Privilege not waived by volunteering evidence.\n*   Section 134: Confidential communication with legal advisers.\n*   Section 135: Production of title-deeds of witness not a party.\n*   Section 136: Production of documents or electronic records which another person, having possession, could refuse to produce.\n*   Section 137: Witness not excused from answering on ground that answer will criminate.\n*   Section 138: Accomplice.\n*   Section 139: Number of witnesses.\n*   Section 140: Order of production and examination of witnesses.\n*   Section 141: Judge to decide as to admissibility of evidence.\n*   Section 142: Examination of witnesses.\n*   Section 143: Order of examinations.\n*   Section 144: Crossexamination of person called to produce a document.\n*   Section 145: Witnesses to character.\n*   Section 146: Leading questions.\n*   Section 147: Evidence as to matters in writing.\n*   Section 148: Crossexamination as to previous statements in writing.\n*   Section 149: Questions lawful in crossexamination.\n*   Section 150: When witness to be compelled to answer.\n*   Section 151: Court to decide when question shall be asked and when witness compelled to answer.\n*   Section 152: Question not to be asked without reasonable grounds.\n*   Section 153: Procedure of Court in case of question being asked without reasonable grounds.\n*   Section 154: Indecent and scandalous questions.\n*   Section 155: Questions intended to insult or annoy.\n*   Section 156: Exclusion of evidence to contradict answers to questions testing veracity.\n*   Section 157: Question by party to his own witness.\n*   Section 158: Impeaching credit of witness.\n*   Section 159: Questions tending to corroborate evidence of relevant fact, admissible.\n*   Section 160: Former statements of witness may be proved to corroborate later testimony as to same fact.\n*   Section 161: What matters may be proved in connection with proved statement relevant under section 26 or",
+        "user": "rindia"
+    },
+    {
+        "message_index": 4,
+        "type": "useful",
+        "timestamp": 1763558632.854641,
+        "content": "*   Section 1: Short title, extent and commencement.\n*   Section 2: Definitions.\n*   Section 3: Construction of references.\n*   Section 4: Trial of offences under Bhartiya Nyaya Sanhita and other laws.\n*   Section 5: Saving.\n*   Section 6: Classes of Criminal Courts.\n*   Section 7: Territorial divisions.\n*   Section 8: Court of Session.\n*   Section 9: Courts of Judicial Magistrates.\n*   Section 10: Chief Judicial Magistrate and Additional Chief Judicial Magistrate, etc.\n*   Section 11: Special Judicial Magistrates.\n*   Section 12: Local jurisdiction of Judicial Magistrates.\n*   Section 13: Subordination of Judicial Magistrates.\n*   Section 14: Executive Magistrates.\n*   Section 15: Special Executive Magistrates.\n*   Section 16: Local Jurisdiction of Executive Magistrates.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763558638.072455,
+        "content": "*   Section 146: Conspiracy to commit offences punishable by section 145.\n*   Section 147: Collecting arms, etc., with intention of waging war against the Government of India.\n*   Section 148: Concealing with intent to facilitate design to wage war.\n*   Section 149: Assaulting President, Governor, etc ., with intent to compel or restrain the exercise of any lawful power.\n*   Section 150: Acts endangering sovereignty unity and integrity of India.\n*   Section 151: Waging war against Gov ernment of any foreign State at peace with the Government of India.\n*   Section 152: Committing depredation on territories of foreign State at peace with the Government of India.\n*   Section 153: Receiving property taken by war or depredation mentioned in sections 153 and\n*   Section 154: Public servant voluntarily allowing prisoner of state or war to escape.\n*   Section 155: Public servant negligently suffering such prisoner to escape.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useful",
+        "timestamp": 1763559932.7159019,
+        "content": "Hello! I'm LegalBot. How can I assist you with your legal questions today?",
+        "user": "rindia"
+    },
+    {
+        "message_index": 6,
+        "type": "useful",
+        "timestamp": 1763598187.2918725,
+        "content": "Based on the legal sections provided, a definition of \"murder\" is not given.\n\nThe sections mention \"murder\" in several contexts, such as:\n*   Listing it as a legal topic (BNS Section 98).\n*   Discussing the \"Attempt to murder\" (BNS Section 107).\n*   Detailing the punishment for a person who \"commits murder\" while under a life sentence (BNS Section 102).\n*   Referencing \"Kidnapping or abducting in order to murder\" (BNS Section 138).\n\nHowever, none of these sources define what the act of murder is.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 2,
+        "type": "useless",
+        "timestamp": 1763622014.6176586,
+        "content": "Hello! How can I assist you today?",
+        "user": "krishna"
+    },
+    {
+        "message_index": 14,
+        "type": "rating",
+        "timestamp": 1763888781.8261392,
+        "content": "Based on the legal sections provided, the following sections are relevant to the act of murder:\n\n*   **BNS Section 99:** This section defines murder. It states that culpable homicide is considered murder if the act is done with the intention of causing death, causing a bodily injury likely to cause death, or if the act is so imminently dangerous that it will in all probability cause death.\n*   **BNS Section 101:** This section deals with the \"Punishment for murder.\"\n*   **BNS Section 102:** This section specifies the \"Punishment for murder by life-convict.\"\n\nAdditionally, depending on the circumstances, other sections could be relevant:\n\n*   **BNS Section 138:** This section applies to \"Kidnapping or abducting in order to murder.\"\n*   **BNS Section 107:** This section applies to an \"Attempt to murder\" if the act did not result in death.",
+        "user": "rindia",
+        "rating": 5
+    },
+    {
+        "message_index": 16,
+        "type": "useful",
+        "timestamp": 1763888789.7959177,
+        "content": "You're very welcome! Let me know if you need anything else.",
+        "user": "rindia"
+    },
+    {
+        "message_index": 16,
+        "type": "rating",
+        "timestamp": 1763888795.2550411,
+        "content": "You're very welcome! Let me know if you need anything else.",
+        "user": "rindia",
+        "rating": 2
+    },
+    {
+        "message_index": 2,
+        "type": "rating",
+        "timestamp": 1763891368.8020034,
+        "content": "Hello! How can I assist you today?",
+        "user": "rindia",
+        "rating": 5
+    },
+    {
+        "message_index": 2,
+        "type": "useless",
+        "timestamp": 1763891372.9738011,
+        "content": "Hello! How can I assist you today?",
+        "user": "rindia"
+    }
+]
