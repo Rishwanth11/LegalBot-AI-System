@@ -43,13 +43,13 @@ def safe_modal(title: str):
         return st.modal(title)
     else:
         class _ExpanderCtx:
-            def __init__(self, title):
+            def _init_(self, title):
                 self.title = title
                 self.container = None
-            def __enter__(self):
+            def _enter_(self):
                 self.container = st.expander(self.title, expanded=True)
                 return self.container
-            def __exit__(self, exc_type, exc, tb):
+            def _exit_(self, exc_type, exc, tb):
                 return False
         return _ExpanderCtx(title)
 
@@ -350,15 +350,15 @@ def find_relevant_sections(query, processed_query, category, categorized_data, s
 
     if query_lower.startswith("show common"):
         if query_lower == "show common bns sections":
-            st.info("Query classified as: **Quick Action (BNS)**")
+            st.info("Query classified as: *Quick Action (BNS)*")
             criminal_list = categorized_data.get("criminal", [])
             return criminal_list[:min(len(criminal_list), 10)]
         if query_lower == "show common bnss sections":
-            st.info("Query classified as: **Quick Action (BNSS)**")
+            st.info("Query classified as: *Quick Action (BNSS)*")
             procedural_list = categorized_data.get("procedural", [])
             return procedural_list[:min(len(procedural_list), 10)]
         if query_lower == "show common bsa sections":
-            st.info("Query classified as: **Quick Action (BSA)**")
+            st.info("Query classified as: *Quick Action (BSA)*")
             evidence_list = categorized_data.get("evidence", [])
             return evidence_list[:min(len(evidence_list), 10)]
         return []
@@ -381,7 +381,7 @@ def find_relevant_sections(query, processed_query, category, categorized_data, s
                     found_sections.append(section_map[key])
 
     if found_sections:
-        st.info("Query classified as: **Section Number Lookup**")
+        st.info("Query classified as: *Section Number Lookup*")
         return found_sections
 
     if category in categorized_data:
@@ -463,9 +463,9 @@ def generate_answer_with_llm(query, relevant_sections):
             file_name = first.get("doc_info")
             pretty = file_name.replace('.json','').upper()
             return (
-                f"`{pretty}` refers to the legal document stored in the app as **{file_name}**. "
+                f"{pretty} refers to the legal document stored in the app as *{file_name}*. "
                 "The corpus contains sections from that source. "
-                f"Try: `show common {pretty.lower()} sections` or request a section number."
+                f"Try: show common {pretty.lower()} sections or request a section number."
             )
 
     try:
@@ -474,18 +474,18 @@ def generate_answer_with_llm(query, relevant_sections):
         if relevant_sections:
             context = (
                 "You are LegalBot, a helpful AI legal assistant. Your task is to answer the user's question.\n"
-                "Base your answer *only* on the relevant legal sections provided below.\n"
-                f"**User's Question:** {query}\n\n"
+                "Base your answer only on the relevant legal sections provided below.\n"
+                f"*User's Question:* {query}\n\n"
                 "--- Relevant Legal Sections ---\n\n"
             )
             for i, section in enumerate(relevant_sections):
                 src = section.get('source_document', '')
                 src_label = src.replace('.json','').upper() if src else src
                 title_preview = section.get('title','')
-                context += f"**Source {i+1} ({src_label} Section {section.get('section_number')} : {title_preview}):**\n"
+                context += f"*Source {i+1} ({src_label} Section {section.get('section_number')} : {title_preview}):*\n"
                 context += f"{section.get('text','')}\n\n"
             context += "--- End of Sections ---\n\n"
-            context += "Please provide a clear and direct answer to the user's question based *only* on these sections."
+            context += "Please provide a clear and direct answer to the user's question based only on these sections."
             try:
                 response = model.generate_content(context)
                 text = getattr(response, "text", None) or str(response)
@@ -748,7 +748,7 @@ def render_header_with_user_menu():
     right = cols[1]
     with left:
         st.markdown(
-            "<div class='header-bar'><div class='header-title'>⚖️ LegalBot — AI-Powered Judiciary Reference System</div>"
+            "<div class='header-bar'><div class='header-title'>⚖ LegalBot — AI-Powered Judiciary Reference System</div>"
             "<div class='small-muted'>Search BNS, BNSS, BSA sections • Professional interface</div></div>",
             unsafe_allow_html=True
         )
@@ -761,9 +761,9 @@ def render_header_with_user_menu():
                 with safe_modal("User Profile"):
                     c1, c2 = st.columns([1, 3])
                     with c1:
-                        st.markdown(f"<div style='font-size:48px'>🧑‍⚖️</div>", unsafe_allow_html=True)
+                        st.markdown(f"<div style='font-size:48px'>🧑‍⚖</div>", unsafe_allow_html=True)
                     with c2:
-                        st.markdown(f"**{username_display}**")
+                        st.markdown(f"{username_display}")
                         st.markdown("Logged in")
                         st.markdown("---")
                         if st.button("Log out", key="profile_logout_btn"):
@@ -822,7 +822,7 @@ with st.sidebar:
     username_display = st.session_state.get("user", None)
     if username_display:
         with st.expander(f"👤 {username_display}", expanded=False):
-            st.markdown(f"**Logged in as:** `{username_display}`")
+            st.markdown(f"*Logged in as:* {username_display}")
             if st.button("Log out", key="sidebar_logout"):
                 st.session_state.show_confirm_logout = True
 
@@ -850,7 +850,7 @@ with st.sidebar:
             st.info("No bookmarks yet. Click the ⭐ next to any answer to save it.")
         else:
             for b in st.session_state.bookmarks:
-                st.markdown(f"**{b['title']}**  \n_added {datetime.datetime.fromtimestamp(b['ts']).strftime('%Y-%m-%d %H:%M:%S')}_")
+                st.markdown(f"{b['title']}**  \n_added {datetime.datetime.fromtimestamp(b['ts']).strftime('%Y-%m-%d %H:%M:%S')}_")
                 st.caption(b['content'][:220] + ("..." if len(b['content'])>220 else ""))
                 cols = st.columns([1,1,1])
                 if cols[0].button("Download TXT", key=f"bm_txt_{b['id']}"):
@@ -916,7 +916,7 @@ with st.sidebar:
             except Exception as e:
                 st.error(f"PDF export failed: {e}")
     else:
-        st.info("PDF export unavailable (install `fpdf` to enable).")
+        st.info("PDF export unavailable (install fpdf to enable).")
 
 # History modal (keeps same behavior)
 if st.session_state.get("show_history_modal", False):
@@ -932,7 +932,7 @@ if st.session_state.get("show_history_modal", False):
                         role = msg.get("role", "")
                         content = msg.get("content", "")
                         ts = datetime.datetime.fromtimestamp(msg.get("ts", time.time())).strftime("%Y-%m-%d %H:%M:%S")
-                        st.markdown(f"**{role.title()}** ({ts}):")
+                        st.markdown(f"{role.title()}** ({ts}):")
                         st.write(content)
                     st.write("---")
                     if st.button("Load this chat", key=f"load_hist_modal_{idx}"):
@@ -1059,13 +1059,13 @@ if st.session_state.get(AUTH_STATUS_KEY, False):
                     if message.get("rating"):
                         st.caption(f"Rating: {'★' * message.get('rating')} ({message.get('rating')}/5)")
                     if feedback_status:
-                        st.caption(f"Feedback: **{feedback_status.upper()}**")
+                        st.caption(f"Feedback: *{feedback_status.upper()}*")
 
     # Input handling
     prompt = None
 
     if st.session_state.get("pending_prompt"):
-        st.info(f"Quick Action queued: `{st.session_state.pending_prompt}` — it will run when you press Enter or the prompt is consumed.")
+        st.info(f"Quick Action queued: {st.session_state.pending_prompt} — it will run when you press Enter or the prompt is consumed.")
 
     if st.session_state.get("pending_prompt"):
         prompt = st.session_state.pending_prompt.strip()
@@ -1091,7 +1091,7 @@ if st.session_state.get(AUTH_STATUS_KEY, False):
                 if not processed_prompt.lower().startswith("show common") and not re.search(r'(bns|bnss|bsa)?\s*(?:section\s*)?(\d+)', full_query.lower()):
                     try:
                         predicted_category = query_classifier.predict([processed_prompt])[0]
-                        st.info(f"Query classified as: **{predicted_category}**")
+                        st.info(f"Query classified as: *{predicted_category}*")
                     except Exception:
                         predicted_category = "general"
 
